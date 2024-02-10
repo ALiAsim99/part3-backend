@@ -6,12 +6,11 @@ if (process.argv.length<3) {
 }
 
 const password = process.argv[2]
-
 const url =
   `mongodb+srv://ali99asim:${password}@cluster0.euqpolc.mongodb.net/personApp?retryWrites=true&w=majority`
 
-mongoose.set('strictQuery',false)
 
+mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
@@ -21,20 +20,25 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-const person = new Person({
-    name: 'Ali Asim',
-    number: '021-34567',
-})
-
-person.save().then(result => {
-  console.log('note saved!')
-  console.log(process[1],process[2])
-  mongoose.connection.close()
-})
-
-Person.find({}).then(result => {
-    result.forEach(note => {
-      console.log(note)
+if(process.argv.length===3){
+  
+  Person.find({}).then(result => {
+    console.log('phonebook: ')
+    result.forEach(person => {
+      console.log(`${person.name} ${person.number}`)
     })
     mongoose.connection.close()
   })
+
+}else{
+  const person = new Person({
+    name: process.argv[3],
+    number: process.argv[4],
+  }) 
+  console.log(process.argv)
+
+  person.save().then(result => {
+    console.log(`added ${result.name} number ${result.number} to phonebook`)
+    mongoose.connection.close()
+  })
+}
