@@ -28,6 +28,7 @@ const person = new Person({
 
 person.save().then(result => {
   console.log('note saved!')
+  console.log(process[1],process[2])
   mongoose.connection.close()
 })
 
