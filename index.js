@@ -1,7 +1,6 @@
 const express=require('express')
 const morgan=require('morgan')
 const cors=require('cors')
-const mongoose = require('mongoose')
 
 const app=express()
 
@@ -10,12 +9,14 @@ app.use(cors())
 app.use(morgan('tiny'))
 app.use(express.static('dist'))
 
+const mongoose = require('mongoose')
 
 const password = process.argv[2]
-const url =
-  `mongodb+srv://ali99asim:${password}@cluster0.euqpolc.mongodb.net/personApp?retryWrites=true&w=majority`
+console.log(password)
+const uri =
+  `mongodb+srv://ali99asim:sam123456@cluster0.euqpolc.mongodb.net/personApp?retryWrites=true&w=majority`
 mongoose.set('strictQuery',false)
-mongoose.connect(url)
+mongoose.connect(uri)
 const personSchema = new mongoose.Schema({
     name: String,
     number: String,

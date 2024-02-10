@@ -6,12 +6,12 @@ if (process.argv.length<3) {
 }
 
 const password = process.argv[2]
-const url =
+const uri =
   `mongodb+srv://ali99asim:${password}@cluster0.euqpolc.mongodb.net/personApp?retryWrites=true&w=majority`
 
 
 mongoose.set('strictQuery',false)
-mongoose.connect(url)
+mongoose.connect(uri)
 
 const personSchema = new mongoose.Schema({
   name: String,
