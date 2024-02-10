@@ -7,6 +7,25 @@ app.use(express.json())
 app.use(cors())
 app.use(morgan('tiny'))
 app.use(express.static('dist'))
+
+const mongoose = require('mongoose')
+
+const password = process.argv[2]
+
+// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
+const url =
+  `mongodb+srv://ali99asim:${password}@cluster0.7iyij1i.mongodb.net/personApp?retryWrites=true&w=majority`
+    
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name:String,
+  number:String
+})
+
+const Person = mongoose.model('Person', personSchema)
+
 let persons=[
     { 
       "id": 1,
@@ -31,7 +50,9 @@ let persons=[
 ]
 
 app.get('/api/persons',(req,res)=>{
-    res.json(persons)
+    Person.find({}).then(persons1=>{
+        response.json(persons1)
+    })
 })
 
 app.get('/info',(req,res)=>{

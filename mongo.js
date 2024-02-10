@@ -8,17 +8,17 @@ if (process.argv.length<3) {
 const password = process.argv[2]
 
 const url =
-  `mongodb+srv://ali99asim:${password}@cluster0.7iyij1i.mongodb.net/personApp?retryWrites=true&w=majority`
+  `mongodb+srv://ali99asim:sam123456@cluster0.7iyij1i.mongodb.net/noteApp?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
-const noteSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   name: String,
   number: String
 })
 
-const Person = mongoose.model('Person', noteSchema)
+const Person = mongoose.model('Person', personSchema)
 
 const person = new Person({
   name: 'Zayn Ali',
