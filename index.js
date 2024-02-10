@@ -29,9 +29,7 @@ let persons=[
       "number": "39-23-6423122"
     }
 ]
-app.get('/',(req,res)=>{
-    res.send(dist / index.html)
-})
+
 app.get('/api/persons',(req,res)=>{
     res.json(persons)
 })
