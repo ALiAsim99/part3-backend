@@ -25,12 +25,12 @@ const person = new Person({
     name: 'Ali Asim',
     number: '021-34567',
 })
-/*
+
 person.save().then(result => {
   console.log('note saved!')
   mongoose.connection.close()
 })
-*/
+
 Person.find({}).then(result => {
     result.forEach(note => {
       console.log(note)
