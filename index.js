@@ -1,10 +1,12 @@
 const express=require('express')
 const morgan=require('morgan')
+const cors=require('cors')
 const app=express()
 
 app.use(express.json())
+app.use(cors())
 app.use(morgan('tiny'))
-
+app.use(express.static('dist'))
 let persons=[
     { 
       "id": 1,
@@ -27,7 +29,9 @@ let persons=[
       "number": "39-23-6423122"
     }
 ]
-
+app.get('/',(req,res)=>{
+    res.send(dist / index.html)
+})
 app.get('/api/persons',(req,res)=>{
     res.json(persons)
 })
@@ -41,7 +45,7 @@ app.get('/api/persons/:id',(req,res)=>{
     const person=persons.find(p=>p.id==id)
     
     if(!person){
-        res.staus(404).end()
+        res.status(404).end()
     }else{    
         res.json(person)
     }
@@ -50,18 +54,18 @@ app.get('/api/persons/:id',(req,res)=>{
 app.delete('/api/persons/:id',(req,res)=>{
     const id=Number(req.params.id);
     persons=persons.filter(p=>p.id!==id)
-    res.staus(404).end()
+    res.status(404).end()
 })
 
 app.post('/api/persons',(req,res)=>{
     const body=req.body;
     if(!body.content || !body.number){
-       return res.staus(404).json({
+       return res.status(404).json({
             error: 'content missing' 
         })
     }
     if(persons.find(p=>p.name==body.name)){
-        return res.staus(404).json({
+        return res.status(404).json({
             error:'name must be unique'
         })
     }
@@ -90,7 +94,7 @@ morgan(function (tokens, req, res) {
     ].join(' ')
   })
 
-const PORT=3001;
-app.listen(PORT,()=>{
+  const PORT = process.env.PORT || 3001
+  app.listen(PORT,()=>{
     console.log('running on port')
 })
