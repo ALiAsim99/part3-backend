@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express=require('express')
 const morgan=require('morgan')
 const cors=require('cors')
@@ -9,28 +10,8 @@ app.use(cors())
 app.use(morgan('tiny'))
 app.use(express.static('dist'))
 
-const mongoose = require('mongoose')
+const Person = require('./models/person')
 
-const password = process.argv[2]
-console.log(password)
-const uri =
-  `mongodb+srv://ali99asim:sam123456@cluster0.euqpolc.mongodb.net/personApp?retryWrites=true&w=majority`
-mongoose.set('strictQuery',false)
-mongoose.connect(uri)
-const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
-  })
-  
-const Person = mongoose.model('Person', personSchema)
-
-personSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-      returnedObject.id = returnedObject._id.toString()
-      delete returnedObject._id
-      delete returnedObject.__v
-    }
-  })
 let persons=[
     { 
       "id": 1,
@@ -118,7 +99,7 @@ morgan(function (tokens, req, res) {
     ].join(' ')
   })
 
-  const PORT = process.env.PORT || 3001
+  const PORT = process.env.PORT
   app.listen(PORT,()=>{
     console.log('running on port')
 })
