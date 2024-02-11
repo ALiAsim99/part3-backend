@@ -46,14 +46,10 @@ app.get('/info',(req,res)=>{
 })
 
 app.get('/api/persons/:id',(req,res)=>{
-    const id=Number(req.params.id);
-    const person=persons.find(p=>p.id==id)
-    
-    if(!person){
-        res.status(404).end()
-    }else{    
+    Person.findById(req.params.id).then(person=>{
         res.json(person)
-    }
+    })
+  
 })
 
 app.delete('/api/persons/:id',(req,res)=>{
@@ -74,13 +70,16 @@ app.post('/api/persons',(req,res)=>{
             error:'name must be unique'
         })
     }
-    const person={
+    const person=new Person({
         name:body.name,
         number:body.number,
         id:generateId()
-    }
-    persons=persons.concat(person)
-    res.json(persons.concat(persons))
+    })
+    person.save()
+          .then(savePerson=>{
+            res.json(savePerson)
+          })
+
 })
 
 const generateId=()=>{
