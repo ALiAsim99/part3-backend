@@ -46,16 +46,26 @@ app.get('/info',(req,res)=>{
 })
 
 app.get('/api/persons/:id',(req,res)=>{
-    Person.findById(req.params.id).then(person=>{
-        res.json(person)
+    Person.findById(req.params.id)
+    .then(person=>{
+      if(person){
+      res.json(person)
+      }else{
+        res.status(404).end()
+      }
     })
-  
+    .catch(error => next(error))  
 })
 
 app.delete('/api/persons/:id',(req,res)=>{
-    const id=Number(req.params.id);
+  Person.findByIdAndDelete(req.params.id)
+  .then(result=>{
+    res.status(204).end()
+  })
+  .catch(error=>next(error))
+ /*   const id=Number(req.params.id);
     persons=persons.filter(p=>p.id!==id)
-    res.status(404).end()
+    res.status(404).end() */
 })
 
 app.post('/api/persons',(req,res)=>{
@@ -79,6 +89,7 @@ app.post('/api/persons',(req,res)=>{
           .then(savePerson=>{
             res.json(savePerson)
           })
+          .catch(error=>next(error))
 
 })
 
@@ -97,6 +108,17 @@ morgan(function (tokens, req, res) {
       tokens['response-time'](req, res), 'ms'
     ].join(' ')
   })
+
+const errorHandler=(error,req,res,next)=>{
+  console.log(error.message)
+    if(error.name=="CastError"){
+      res.status(400).send({error:'malformated id'})
+    }else if(error.name=='ValidationError'){
+      res.status(400).json({error:error.message})
+    }
+    next(error)
+}
+app.use(errorHandler)
 
   const PORT = process.env.PORT
   app.listen(PORT,()=>{
